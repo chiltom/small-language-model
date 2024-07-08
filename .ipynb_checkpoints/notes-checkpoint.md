@@ -10,6 +10,8 @@
 
 `torch.zeros(*size, *) -> Tensor`: Returns a tensor filled with the scalar value *0*, with the shape defined by the variable argument `size`.
 
+`torch.arange(start=0, end, step=1, *) -> Tensor`: Returns a 1-D tensor of size ((end-start)/step) with values from the interval [`start`, `end`) taken with common difference `step` beginning from `start`.
+
 ## `torch.Tensor` Class and Method Explanations
 A `torch.Tensor` is a multi-dimensional matrix containing elements of a single data type.
 
@@ -35,10 +37,35 @@ A `torch.Tensor` is a multi-dimensional matrix containing elements of a single d
 `nn.LayerNorm(normalized_shape)`: Applies Layer Normalization over a mini-batch of inputs. The mean and standard-deviation are calculated over the last *D* dimensions, where *D* is the dimension of `normalized_shape`.
 - `normalized_shape` (int or list or `torch.Size`): input shape from an expected input of size.
 
+`nn.ReLU(inplace=False)`: Applies the rectified linear unit function element-wise.
+- $ReLU(x) = (x)^+ = max(0,x)$
+
+`nn.Dropout(p=0.5, inplace=False)`: During training, randomly zeroes some of the elements of the input tensor with probability `p`. The zeroed elements are chosen independently for each forward call and are sampled from a Bernoulli distribution.
+- This has proben to be an effective technique for regularization and preventing the co-adaptation of neurons.
+
+`nn.init.normal_(tensor, mean=0.0, std=1.0) -> Tensor`: Fill the input Tensor with values drawn from the normal distribution.
+- `tensor` (Tensor): An n-dimensional `torch.Tensor`.
+- `mean` (float): The mean of the normal distribution.
+- `std` (float): The standard deviation of the normal distribution.
+
+`nn.init.zeros_(tensor) -> Tensor`: Fill the input Tensor with the scalar value *0*.
+
 ## `torch.nn.functional` Package Explanations
 `F.cross_entropy`: Compute the cross entropy loss between input logits and target.
 
 `F.softmax`: Apply a softmax function.
+
+## `torch.nn.Module` Class and Method Explanations
+> [!NOTE]
+> This class is the base class for all neural network modules. Your models should also subclass this class.
+> Modules can also contain other Modules, allowing for nesting them in a tree structure. You can assign the submodules as regular attributes. Submodules assigned in this way will be registered, and will have their parameters converted too when you call `to()`, etc.
+
+`to(device=None, dtype=None) -> self`: Loads the model onto the CPU or onto the GPU using CUDA and/or casts the parameters and buffers to the specified `dtype`.
+
+`train(mode=True) -> self`: Set the module in **training** mode.
+- `mode` (bool): Whether to set training mode (`True`) or evaluation mode (`False`).
+
+`eval() -> self`: Set the module in **evaluation** mode.
 
 ## `torch.optim.AdamW` Class and Method Explanations
 **Adam** (Adaptive Moment Estimation) is an adaptive learning rate algorithm designed specifically for training deep neural networks.
@@ -66,10 +93,22 @@ By decoupling weight decay, AdamW avoids the convergence issues associated with 
 `torch.optim.AdamW.step(closure=None)`: Perform a single optimization step.
 
 ## Miscallaneous Explanations
-`model.to(device)`: Loads the model onto the GPU using CUDA, which was defined at the top of the notebook.
 **logits**: Logits are the **unnormalized** outputs of a neural network. A softmax (normalization) function is used to squash the outputs of a neural network (logits) so that they are all between 0 and 1 and sum to 1.
 
-References: 
-- Brownlee, J. (2021) Gentle introduction to the adam optimization algorithm for deep learning, MachineLearningMastery.com. Available at: https://machinelearningmastery.com/adam-optimization-algorithm-for-deep-learning/ (Accessed: 07 July 2024).
-- Papers with code - AdamW explained. Available at: https://paperswithcode.com/method/adamw (Accessed: 07 July 2024).
-- PyTorch documentation: https://pytorch.org/docs/stable/index.html.
+### Broadcasting Semantics
+In short, if a PyTorch operation supports broadcast, then its Tensor arguments can be automatically expanded to be of equal sizes (without making copies of the data).
+
+Two tensors are "broadcastable" if the following rules hold:
+- Each tensor has at least one dimension.
+- When iterating over the dimension sizes, starting at the trailing dimension, the dimension sizes must either be equal, one of them is 1, or one of them does not exist.
+
+If two tensors `x`, `y` are "broadcastable", the resulting tensor size is calculated as follows:
+- If the number of dimensions of `x` and `y` are not equal, prepend 1 to the dimensions of the tensor with fewer dimensions to make them equal length.
+- Then, for each dimension size, the resulting dimension size is the max of the sizes of `x` and `y` along that dimension.
+
+## References 
+Brownlee, J. (2021) Gentle introduction to the adam optimization algorithm for deep learning, MachineLearningMastery.com. Available at: https://machinelearningmastery.com/adam-optimization-algorithm-for-deep-learning/ (Accessed: 07 July 2024).
+
+Papers with code - AdamW explained. Available at: https://paperswithcode.com/method/adamw (Accessed: 07 July 2024).
+
+PyTorch documentation: https://pytorch.org/docs/stable/index.html.
