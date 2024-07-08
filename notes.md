@@ -30,6 +30,9 @@ A `torch.Tensor` is a multi-dimensional matrix containing elements of a single d
 - The `forward()` method of `Sequential` accepts any input and forwards it to the first module it contains. It then "chains" outputs to inputs sequentially for each subsequent module, finally returning the output of the last module.
 - The value a `Sequential` provides over manually calling a sequence of modules is that it allows treating the whole container as a single module, such that performing a transformation on the `Sequential` applies it to each of the modules it stores (which are a registered submodule of the `Sequental`).
 
+`nn.ModuleList(modules=None)`: Holds submodules in a list. `ModuleList` can be indexed like a regular Python list, but modules it contains are properly registered, and will be visible by all `Module` methods.
+- `modules` (iterable, optional): an iterable of modules to add.
+
 `nn.Embedding(num_embeddings, embedding_dim)`: A simple lookup table that stores embeddings of a fixed dictionary and size.
 - `num_embeddings` (int): size of the dictionary of embeddings.
 - `embedding_dim` (int): the size of each embedding vector.
@@ -51,9 +54,13 @@ A `torch.Tensor` is a multi-dimensional matrix containing elements of a single d
 `nn.init.zeros_(tensor) -> Tensor`: Fill the input Tensor with the scalar value *0*.
 
 ## `torch.nn.functional` Package Explanations
-`F.cross_entropy`: Compute the cross entropy loss between input logits and target.
+`F.cross_entropy(input, target)`: Compute the cross entropy loss between input logits and target.
+- `input` (Tensor): Predicted unnormalized logits.
+- `target` (Tensor): Ground truth class indices or class probabilities.
 
-`F.softmax`: Apply a softmax function.
+`F.softmax(input, dim=None) -> Tensor`: Apply a softmax function. It is applied to all slices along `dim`, and will re-scale them so that the elements lie in the range [0, 1] and sum to 1.
+- `input` (Tensor): input.
+- `dim` (int): A dimension along which softmax will be computed.
 
 ## `torch.nn.Module` Class and Method Explanations
 > [!NOTE]
