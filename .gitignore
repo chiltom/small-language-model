@@ -6,3 +6,6 @@ __pycache__
 # Training data source files and compiled text files
 training_data
 text_files
+
+# Pickled model parameters
+model-01.pkl

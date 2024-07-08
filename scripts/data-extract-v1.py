@@ -14,9 +14,9 @@ def xz_files_in_dir(directory):
 
 load_dotenv()
 folder_path = os.getenv('folder_path')
-output_file_train = "./text_files/output_train.txt"
-output_file_val = "./text_files/output_val.txt"
-vocab_file = "./text_files/vocab.txt"
+output_file_train = "text_files/output_train.txt"
+output_file_val = "text_files/output_val.txt"
+vocab_file = "text_files/vocab.txt"
 
 files = xz_files_in_dir(folder_path)
 total_files = len(files)
