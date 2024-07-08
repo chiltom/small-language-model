@@ -7,7 +7,7 @@ This is the Bigram Language Model, a small-scale Large-Language-Model that uses 
 ## Developing
 
 > [!WARNING]
-> This program uses MPS, or Metal, from the PyTorch library to utilize the Mac Silicon GPU for parallel processing. If you are on another operating system or use another GPU, you may have to change the device to `cuda` or research which service that PyTorch has implemented for your OS/GPU.
+> This program uses Cuda from the PyTorch library to utilize an NVIDIA GPU for parallel processing. If you are on another operating system or use another GPU, you may have to change the device to `mps` or research which service that PyTorch has implemented for your OS/GPU.
 
 To get started with the source code and developing locally:
 
@@ -21,7 +21,13 @@ To get started with the source code and developing locally:
 
   ```shell
   python3 -m venv .venv
+
+  # Mac
   source .venv/bin/activate
+
+  # Windows
+  .venv\Scripts\activate
+
   pip install -r requirements.txt
   ```
 
