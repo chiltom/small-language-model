@@ -1,2 +1,8 @@
+# Virtual environment, compiled code, environment variables
 __pycache__
 .venv
+.env
+
+# Training data source files and compiled text files
+training_data
+text_files

@@ -12,6 +12,11 @@
 
 `torch.arange(start=0, end, step=1, *) -> Tensor`: Returns a 1-D tensor of size ((end-start)/step) with values from the interval [`start`, `end`) taken with common difference `step` beginning from `start`.
 
+`torch.transpose(input, dim0, dim1) -> Tensor`: Returns a tensor that is a transposed version of `input`. The given dimensions `dim0` and `dim1` are swapped.
+
+`torch.no_grad(orig_func=None)`: Context-manager that disables gradient calculation.
+- Disabling gradient calculation is useful for inference, when you are sure that you will not call `Tensor.backward()`. It will reduce memory consumption for computations that would otherwise have `requires_grad=True`.
+
 ## `torch.Tensor` Class and Method Explanations
 A `torch.Tensor` is a multi-dimensional matrix containing elements of a single data type.
 
@@ -101,6 +106,14 @@ By decoupling weight decay, AdamW avoids the convergence issues associated with 
 
 ## Miscallaneous Explanations
 **logits**: Logits are the **unnormalized** outputs of a neural network. A softmax (normalization) function is used to squash the outputs of a neural network (logits) so that they are all between 0 and 1 and sum to 1.
+
+Multi-head attention allows for the parallel training of many different blocks, or decoders in this case, to efficiently train the model while capturing a good variety of predictions. The different heads are trained with scaled dot-product attention, their results are concatenated, a Linear transformation is applied to the converged results, and finally a dropout is applied to the transformation result to prevent overfitting.
+
+Applying the softmax function makes significant values stand out more, giving them an "attention score" that is taken into consideration when making generated predictions based on input. It allows the model to learn more from and train better on important tokens.
+
+Using `nn.ModuleList` in some locations and `nn.Sequential` in others is done with a specific purpose. 
+`nn.ModuleList` is a container that houses multiple `nn.Module`s that *do not* depend on each other. By registering CUDA Modules in the ModuleList, it can be used to run all of these modules in parallel. This allows for more efficient training and computation, but uses more GPU memory as the input size and number of blocks increases.
+`nn.Sequential` is a container that houses multiple `nn.Module`s that *do* depend on one another. The sequence of Modules placed in the Sequential container matters, and all computations and training runs synchronously starting with the first Module. Each sub-Module (excluding the first) within the Sequential container depends on the input of the last Module, uses that input in its computations and training, and submits the output to the next Module.
 
 ### Broadcasting Semantics
 In short, if a PyTorch operation supports broadcast, then its Tensor arguments can be automatically expanded to be of equal sizes (without making copies of the data).
