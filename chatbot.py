@@ -1,4 +1,3 @@
-import argparse
 import random
 import mmap
 import pickle
@@ -6,19 +5,11 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
-parser = argparse.ArgumentParser(description="This is a model training script")
-
-# Here we add an argument to the parser, specifying the expected type, a help message, etc.
-parser.add_argument('-batch_size', type=str, required=True,
-                    help='Please provide a batch_size')
-
-args = parser.parse_args()
-
+# Hyper-parameters
 # Device setting (GPU if available, CPU if not)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-# How many sequences we want running at the same time
-batch_size = int(args.batch_size)
-block_size = 128  # Sequence length
+batch_size = 128  # How many sequences we want running at the same time (32)
+block_size = 32  # Sequence length (128)
 max_iters = 300  # Number of training iterations
 # Learning rate (updated by the AdamW optimization algorithm)
 learning_rate = 3e-4
@@ -71,6 +62,7 @@ class Head(nn.Module):
         # Perform the weighted aggregation of the values
         v = self.value(x)  # (B, T, hs)
         out = wei @ v  # (B, T, T) @ (B, T, hs) -> (B, T, hs)
+
         return out  # Output of size (batch, time-step, head size)
 
 
@@ -149,7 +141,7 @@ class GPTLanguageModel(nn.Module):
             if module.bias is not None:
                 nn.init.zeros_(module.bias)
         elif isinstance(module, nn.Embedding):
-            torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
+            nn.init.normal_(module.weight, mean=0.0, std=0.02)
 
     def forward(self, index, targets=None):
         B, T = index.shape
