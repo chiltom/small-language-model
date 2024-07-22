@@ -15,7 +15,7 @@ parser.add_argument('-batch_size', type=str, required=True,
 args = parser.parse_args()
 
 # Device setting (GPU if available, CPU if not)
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
+device = 'mps' if torch.backends.mps.is_available() else 'cpu'
 # How many sequences we want running at the same time
 batch_size = int(args.batch_size)
 block_size = 128  # Sequence length

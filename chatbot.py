@@ -7,7 +7,7 @@ from torch.nn import functional as F
 
 # Hyper-parameters
 # Device setting (GPU if available, CPU if not)
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
+device = 'mps' if torch.backends.mps.is_available() else 'cpu'
 batch_size = 128  # How many sequences we want running at the same time (32)
 block_size = 32  # Sequence length (128)
 max_iters = 300  # Number of training iterations

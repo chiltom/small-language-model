@@ -7,7 +7,7 @@ This is the Bigram language model, which uses a deep-learning neural network and
 ## Developing
 
 > [!WARNING]
-> This program uses CUDA from the PyTorch library to leverage an NVIDIA GPU for parallel processing. If you are on a different operating system or use another GPU, you may need to change the device to `mps` or research the appropriate service that PyTorch provides for your OS/GPU.
+> This program uses MPS from the PyTorch library to leverage a Mac Silicon GPU for parallel processing. If you are on a different operating system or use another GPU, you may need to change the device to `CUDA` or research the appropriate service that PyTorch provides for your OS/GPU.
 
 To get started with the source code and developing/running locally:
 
