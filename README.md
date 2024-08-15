@@ -69,7 +69,7 @@ The model utilizes a transformer architecture, consisting of multiple layers of 
 
 A high-level overview of the transformer architecture can be found [here](./docs/architecture.png)
 
-My various notes on different modules, classes, methods, attributes, and explanations can be found [here](./docs/notes.md)
+Various notes on different modules, classes, methods, attributes, and explanations can be found [here](./docs/notes.md)
 
 ## Attribution
 
